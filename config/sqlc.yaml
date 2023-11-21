@@ -1,0 +1,9 @@
+version: 1
+packages:
+  - name: "db"
+    path: "../internal/constants/model/db"
+    engine: "postgresql"
+    emit_json_tags: true
+    sql_package: "pgx/v4"
+    schema: "../internal/constants/query/schemas"
+    queries: "../internal/constants/query/queries"
