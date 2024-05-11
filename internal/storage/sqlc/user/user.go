@@ -56,7 +56,7 @@ func (u *user) Update(ctx context.Context, id uuid.UUID, param dto.UpdateUser) (
 	})
 	if err != nil {
 		err = errors.ErrWriteError.Wrap(err, "could not update user")
-		u.log.Error(ctx, "unable to update user", zap.Error(err), zap.Any("user", param))
+		u.log.Error(ctx, "unable to update user", zap.Error(err), zap.Any("user", param), zap.String("user-id", id.String()))
 		return nil, err
 	}
 	return &dto.User{
@@ -73,7 +73,7 @@ func (u *user) Get(ctx context.Context, id uuid.UUID) (*dto.User, error) {
 	user, err := u.db.GetUser(ctx, id)
 	if err != nil {
 		err = errors.ErrWriteError.Wrap(err, "could not read user")
-		u.log.Error(ctx, "unable to get user", zap.Error(err))
+		u.log.Error(ctx, "unable to get user", zap.Error(err), zap.String("user-id", id.String()))
 		return nil, err
 	}
 	return &dto.User{
@@ -97,7 +97,7 @@ func (u *user) GetAll(ctx context.Context) ([]dto.User, error) {
 	return users, nil
 }
 
-func (u *user) IsUserExists(ctx context.Context, param dto.RegisterUser) (bool, error) {
+func (u *user) CheckUserExists(ctx context.Context, param dto.RegisterUser) (bool, error) {
 	count, err := u.db.UserByEmailExists(ctx, param.Email)
 	if err != nil {
 		err := errors.ErrReadError.Wrap(err, "could not read user")

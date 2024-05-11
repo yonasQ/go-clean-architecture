@@ -6,32 +6,12 @@ import (
 	"github.com/joomcode/errorx"
 )
 
-type ErrorType struct {
-	ErrorCode int
-	ErrorType *errorx.Type
-}
-
-var Error = []ErrorType{
-	{
-		ErrorCode: http.StatusBadRequest,
-		ErrorType: ErrInvalidUserInput,
-	},
-	{
-		ErrorCode: http.StatusBadRequest,
-		ErrorType: ErrDataExists,
-	},
-	{
-		ErrorCode: http.StatusInternalServerError,
-		ErrorType: ErrReadError,
-	},
-	{
-		ErrorCode: http.StatusInternalServerError,
-		ErrorType: ErrWriteError,
-	},
-	{
-		ErrorCode: http.StatusNotFound,
-		ErrorType: ErrNoRecordFound,
-	},
+var ErrorMap = map[*errorx.Type]int{
+	ErrInvalidUserInput: http.StatusBadRequest,
+	ErrDataExists:       http.StatusBadRequest,
+	ErrReadError:        http.StatusInternalServerError,
+	ErrWriteError:       http.StatusInternalServerError,
+	ErrNoRecordFound:    http.StatusNotFound,
 }
 
 var (

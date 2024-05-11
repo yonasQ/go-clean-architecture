@@ -13,13 +13,13 @@ import (
 )
 
 type user struct {
-	userPersistant storage.User
+	userPersistent storage.User
 	log            logger.Logger
 }
 
-func Init(log logger.Logger, userPersistant storage.User) module.User {
+func Init(log logger.Logger, userPersistent storage.User) module.User {
 	return &user{
-		userPersistant: userPersistant,
+		userPersistent: userPersistent,
 		log:            log,
 	}
 }
@@ -31,18 +31,16 @@ func (u *user) Create(ctx context.Context, param dto.RegisterUser) (*dto.User, e
 		return nil, err
 	}
 
-	isExist, err := u.userPersistant.IsUserExists(ctx, param)
+	exist, err := u.userPersistent.CheckUserExists(ctx, param)
 	if err != nil {
 		return nil, err
-	}
-
-	if isExist {
+	} else if exist {
 		err = errors.ErrDataExists.New("user with this email already exists")
 		u.log.Error(ctx, "duplicated data", zap.String("user-email", param.Email))
 		return nil, err
 	}
 
-	return u.userPersistant.Create(ctx, param)
+	return u.userPersistent.Create(ctx, param)
 }
 
 func (u *user) DeleteUser(ctx context.Context, id string) error {
@@ -53,7 +51,7 @@ func (u *user) DeleteUser(ctx context.Context, id string) error {
 		return err
 	}
 
-	return u.userPersistant.DeleteUser(ctx, userId)
+	return u.userPersistent.DeleteUser(ctx, userId)
 }
 
 func (u *user) Update(ctx context.Context, id string, param dto.UpdateUser) (*dto.User, error) {
@@ -66,24 +64,24 @@ func (u *user) Update(ctx context.Context, id string, param dto.UpdateUser) (*dt
 	uuidID, err := uuid.Parse(id)
 	if err != nil {
 		err = errors.ErrInvalidUserInput.Wrap(err, "invalid user id")
-		u.log.Error(ctx, "parsing user id failed", zap.Error(err))
+		u.log.Error(ctx, "parsing user id failed", zap.Error(err), zap.String("user-id", id))
 		return nil, err
 	}
 
-	return u.userPersistant.Update(ctx, uuidID, param)
+	return u.userPersistent.Update(ctx, uuidID, param)
 }
 
 func (u *user) Get(ctx context.Context, id string) (*dto.User, error) {
 	uuidID, err := uuid.Parse(id)
 	if err != nil {
 		err := errors.ErrInvalidUserInput.Wrap(err, "invalid user id")
-		u.log.Error(ctx, "parsing user id failed", zap.Error(err))
+		u.log.Error(ctx, "parsing user id failed", zap.Error(err), zap.String("user-id", id))
 		return nil, err
 	}
 
-	return u.userPersistant.Get(ctx, uuidID)
+	return u.userPersistent.Get(ctx, uuidID)
 }
 
 func (u *user) GetAll(ctx context.Context) ([]dto.User, error) {
-	return u.userPersistant.GetAll(ctx)
+	return u.userPersistent.GetAll(ctx)
 }
