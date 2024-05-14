@@ -15,11 +15,11 @@ import (
 )
 
 type user struct {
-	db  dbinstance.DBInstance
+	db  dbinstance.Store
 	log logger.Logger
 }
 
-func Init(db dbinstance.DBInstance, log logger.Logger) storage.User {
+func Init(db dbinstance.Store, log logger.Logger) storage.User {
 	return &user{
 		db:  db,
 		log: log,

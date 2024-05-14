@@ -11,7 +11,7 @@ type Persistence struct {
 	user storage.User
 }
 
-func InitPersistence(db dbinstance.DBInstance, log logger.Logger) Persistence {
+func InitPersistence(db dbinstance.Store, log logger.Logger) Persistence {
 	return Persistence{
 		user: user.Init(db, log.Named("user-persistence")),
 	}

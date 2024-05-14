@@ -18,6 +18,7 @@ import (
 )
 
 // Initiate
+//
 //	@title			project setup API
 //	@version		0.1
 //	@host			localhost:8000
@@ -27,7 +28,7 @@ func Initiator(ctx context.Context) {
 	log := InitLogger()
 	log.Info(ctx, "logger initialized")
 
-	log.Info(ctx, "initializing config")	
+	log.Info(ctx, "initializing config")
 	InitConfig("config", "config", log)
 	log.Info(ctx, "config initialized")
 
