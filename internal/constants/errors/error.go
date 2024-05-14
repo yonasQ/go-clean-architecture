@@ -6,14 +6,6 @@ import (
 	"github.com/joomcode/errorx"
 )
 
-var ErrorMap = map[*errorx.Type]int{
-	ErrInvalidUserInput: http.StatusBadRequest,
-	ErrDataExists:       http.StatusBadRequest,
-	ErrReadError:        http.StatusInternalServerError,
-	ErrWriteError:       http.StatusInternalServerError,
-	ErrNoRecordFound:    http.StatusNotFound,
-}
-
 var (
 	invalidInput = errorx.NewNamespace("validation error").ApplyModifiers(errorx.TypeModifierOmitStackTrace)
 	dbError      = errorx.NewNamespace("db error")
@@ -28,3 +20,11 @@ var (
 	ErrDataExists       = errorx.NewType(duplicate, "data already exists")
 	ErrNoRecordFound    = errorx.NewType(dataNotFound, "no record found")
 )
+
+var ErrorMap = map[*errorx.Type]int{
+	ErrInvalidUserInput: http.StatusBadRequest,
+	ErrWriteError:       http.StatusInternalServerError,
+	ErrReadError:        http.StatusInternalServerError,
+	ErrDataExists:       http.StatusBadRequest,
+	ErrNoRecordFound:    http.StatusNotFound,
+}
