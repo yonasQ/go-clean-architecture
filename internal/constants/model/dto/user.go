@@ -6,6 +6,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
+	"github.com/jackc/pgtype"
 )
 
 type User struct {
@@ -27,7 +28,7 @@ type User struct {
 	// It is automatically set when the user is created.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// DeletedAt is the time the user was deleted.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt pgtype.Timestamptz `json:"deleted_at,omitempty"`
 	// UpdatedAt is the time the user was last updated.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
