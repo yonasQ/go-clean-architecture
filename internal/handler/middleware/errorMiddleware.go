@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"project-structure-template/internal/constants"
 	"project-structure-template/internal/constants/errors"
@@ -49,6 +50,7 @@ func CastErrorResponse(err error) *model.ErrorResponse {
 	debugMode := viper.GetBool("debug")
 	er := errorx.Cast(err)
 	if er == nil {
+		log.Println("unknown errorx type error: ", err)
 		return &model.ErrorResponse{
 			Code:    http.StatusInternalServerError,
 			Message: "Unknown server error",
