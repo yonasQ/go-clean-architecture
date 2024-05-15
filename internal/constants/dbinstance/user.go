@@ -15,9 +15,9 @@ func (q *DBInstance) GetAllUsers(ctx context.Context) ([]dto.User, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []dto.User
+	items := []dto.User{}
 	for rows.Next() {
-		var i dto.User
+		i := dto.User{}
 		if err := rows.Scan(
 			&i.ID,
 			&i.FirstName,
