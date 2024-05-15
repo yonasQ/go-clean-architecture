@@ -27,8 +27,8 @@ import (
 //	@contact.url	http://www.2fcapital.com
 //	@contact.email	info@1f-capital.com
 
-//	@host		localhost:8000
-//	@BasePath	/v1
+// @host		localhost:8000
+// @BasePath	/v1
 func Initiator(ctx context.Context) {
 
 	log := InitLogger()
