@@ -19,10 +19,16 @@ import (
 
 // Initiate
 //
-//	@title			project setup API
-//	@version		0.1
-//	@host			localhost:8000
-//	@BasePath		/v1
+//	@title		project setup API
+//	@version	0.1
+//	@description
+
+//	@contact.name	2F Capital Support Email
+//	@contact.url	http://www.2fcapital.com
+//	@contact.email	info@1f-capital.com
+
+//	@host		localhost:8000
+//	@BasePath	/v1
 func Initiator(ctx context.Context) {
 
 	log := InitLogger()
