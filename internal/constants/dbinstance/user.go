@@ -5,12 +5,12 @@ import (
 	"project-structure-template/internal/constants/model/dto"
 )
 
-const getUsers = `-- name: GetUsers :many
-SELECT id, first_name, middle_name, last_name, email, status, created_at, updated_at, deleted_at FROM users WHERE deleted_at = NULL
+const getAllUsers = `-- name: GetAllUsers :many
+SELECT id, first_name, middle_name, last_name, email, status, created_at, updated_at, deleted_at FROM users WHERE deleted_at IS NULL
 `
 
 func (q *DBInstance) GetAllUsers(ctx context.Context) ([]dto.User, error) {
-	rows, err := q.Pool.Query(ctx, getUsers)
+	rows, err := q.Pool.Query(ctx, getAllUsers)
 	if err != nil {
 		return nil, err
 	}
