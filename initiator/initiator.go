@@ -62,7 +62,7 @@ func Initiator(ctx context.Context) {
 	log.Info(ctx, "initializing server")
 	server := gin.New()
 	server.Use(ginzap.RecoveryWithZap(log.GetZapLogger().Named("gin.recovery"), true))
-	server.Use(middleware.ErrorHandler())
+	server.Use(middleware.ErrorHandler(log))
 	log.Info(ctx, "server initialized")
 
 	log.Info(ctx, "initializing router")

@@ -2,26 +2,27 @@ package middleware
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"project-structure-template/internal/constants"
 	"project-structure-template/internal/constants/errors"
 	"project-structure-template/internal/constants/model"
+	"project-structure-template/platform/logger"
 
 	"github.com/gin-gonic/gin"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/joomcode/errorx"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
-func ErrorHandler() gin.HandlerFunc {
+func ErrorHandler(log logger.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 		if len(c.Errors) > 0 {
 			e := c.Errors[0] // FIXME: how to handle multiple errors?
 			err := e.Unwrap()
 
-			constants.ErrorResponse(c, CastErrorResponse(err))
+			constants.ErrorResponse(c, CastErrorResponse(err, c, log))
 			return
 		}
 	}
@@ -46,11 +47,11 @@ func ErrorFields(err error) []model.FieldError {
 	return nil
 }
 
-func CastErrorResponse(err error) *model.ErrorResponse {
+func CastErrorResponse(err error, c *gin.Context, log logger.Logger) *model.ErrorResponse {
 	debugMode := viper.GetBool("debug")
 	er := errorx.Cast(err)
 	if er == nil {
-		log.Println("unknown errorx type error: ", err)
+		log.Error(c, "unknown errorx type error", zap.Error(err))
 		return &model.ErrorResponse{
 			Code:    http.StatusInternalServerError,
 			Message: "Unknown server error",
