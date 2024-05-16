@@ -6,7 +6,7 @@ import (
 )
 
 const getAllUsers = `-- name: GetAllUsers :many
-SELECT id, first_name, middle_name, last_name, email, status, created_at, updated_at, deleted_at FROM users WHERE deleted_at IS NULL
+SELECT id, first_name, middle_name, last_name, email, status, created_at, updated_at FROM users WHERE deleted_at IS NULL
 `
 
 func (q *DBInstance) GetAllUsers(ctx context.Context) ([]dto.User, error) {
@@ -27,7 +27,6 @@ func (q *DBInstance) GetAllUsers(ctx context.Context) ([]dto.User, error) {
 			&i.Status,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.DeletedAt,
 		); err != nil {
 			return nil, err
 		}

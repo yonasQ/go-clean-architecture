@@ -11,7 +11,6 @@ import (
 	"project-structure-template/platform/logger"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgtype"
 	"go.uber.org/zap"
 )
 
@@ -45,7 +44,6 @@ func (u *user) Create(ctx context.Context, param dto.RegisterUser) (*dto.User, e
 		MiddleName: user.MiddleName,
 		LastName:   user.LastName,
 		CreatedAt:  user.CreatedAt,
-		DeletedAt:  pgtype.Timestamptz{Status: pgtype.Null},
 	}, nil
 }
 
@@ -68,7 +66,6 @@ func (u *user) Update(ctx context.Context, id uuid.UUID, param dto.UpdateUser) (
 		MiddleName: user.MiddleName,
 		LastName:   user.LastName,
 		CreatedAt:  user.CreatedAt,
-		DeletedAt:  pgtype.Timestamptz{Status: pgtype.Null},
 	}, nil
 }
 
@@ -87,7 +84,6 @@ func (u *user) Get(ctx context.Context, id uuid.UUID) (*dto.User, error) {
 		LastName:   user.LastName,
 		CreatedAt:  user.CreatedAt,
 		Status:     string(user.Status),
-		DeletedAt:  pgtype.Timestamptz{Status: pgtype.Null},
 	}, nil
 }
 

@@ -35,7 +35,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/project-structure-template_internal_constants_model_dto.User"
+                                "$ref": "#/definitions/dto.User"
                             }
                         }
                     },
@@ -44,7 +44,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/project-structure-template_internal_constants_model.ErrorResponse"
+                                "$ref": "#/definitions/model.ErrorResponse"
                             }
                         }
                     }
@@ -69,7 +69,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/project-structure-template_internal_constants_model_dto.RegisterUser"
+                            "$ref": "#/definitions/dto.RegisterUser"
                         }
                     }
                 ],
@@ -77,7 +77,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Successfully created user",
                         "schema": {
-                            "$ref": "#/definitions/project-structure-template_internal_constants_model_dto.User"
+                            "$ref": "#/definitions/dto.User"
                         }
                     },
                     "400": {
@@ -85,7 +85,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/project-structure-template_internal_constants_model.ErrorResponse"
+                                "$ref": "#/definitions/model.ErrorResponse"
                             }
                         }
                     }
@@ -115,7 +115,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Successfully retrieved user",
                         "schema": {
-                            "$ref": "#/definitions/project-structure-template_internal_constants_model_dto.User"
+                            "$ref": "#/definitions/dto.User"
                         }
                     },
                     "400": {
@@ -123,7 +123,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/project-structure-template_internal_constants_model.ErrorResponse"
+                                "$ref": "#/definitions/model.ErrorResponse"
                             }
                         }
                     }
@@ -159,7 +159,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/project-structure-template_internal_constants_model.ErrorResponse"
+                                "$ref": "#/definitions/model.ErrorResponse"
                             }
                         }
                     },
@@ -168,7 +168,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/project-structure-template_internal_constants_model.ErrorResponse"
+                                "$ref": "#/definitions/model.ErrorResponse"
                             }
                         }
                     }
@@ -200,7 +200,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/project-structure-template_internal_constants_model_dto.UpdateUser"
+                            "$ref": "#/definitions/dto.UpdateUser"
                         }
                     }
                 ],
@@ -208,7 +208,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Successfully updated user",
                         "schema": {
-                            "$ref": "#/definitions/project-structure-template_internal_constants_model_dto.User"
+                            "$ref": "#/definitions/dto.User"
                         }
                     },
                     "400": {
@@ -216,7 +216,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/project-structure-template_internal_constants_model.ErrorResponse"
+                                "$ref": "#/definitions/model.ErrorResponse"
                             }
                         }
                     }
@@ -225,88 +225,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "pgtype.InfinityModifier": {
-            "type": "integer",
-            "enum": [
-                1,
-                0,
-                -1
-            ],
-            "x-enum-varnames": [
-                "Infinity",
-                "None",
-                "NegativeInfinity"
-            ]
-        },
-        "pgtype.Status": {
-            "type": "integer",
-            "enum": [
-                0,
-                1,
-                2
-            ],
-            "x-enum-varnames": [
-                "Undefined",
-                "Null",
-                "Present"
-            ]
-        },
-        "pgtype.Timestamptz": {
-            "type": "object",
-            "properties": {
-                "infinityModifier": {
-                    "$ref": "#/definitions/pgtype.InfinityModifier"
-                },
-                "status": {
-                    "$ref": "#/definitions/pgtype.Status"
-                },
-                "time": {
-                    "type": "string"
-                }
-            }
-        },
-        "project-structure-template_internal_constants_model.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "Code is the error code. It is not status code",
-                    "type": "integer"
-                },
-                "description": {
-                    "description": "Description is the error description.",
-                    "type": "string"
-                },
-                "field_error": {
-                    "description": "FieldError is the error detail for each field, if available that is.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/project-structure-template_internal_constants_model.FieldError"
-                    }
-                },
-                "message": {
-                    "description": "Message is the error message.",
-                    "type": "string"
-                },
-                "stack_trace": {
-                    "description": "StackTrace is the stack trace of the error.\nIt is only returned for debugging",
-                    "type": "string"
-                }
-            }
-        },
-        "project-structure-template_internal_constants_model.FieldError": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "description": "Description is the error description for this field.",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "Name is the name of the field that caused the error.",
-                    "type": "string"
-                }
-            }
-        },
-        "project-structure-template_internal_constants_model_dto.RegisterUser": {
+        "dto.RegisterUser": {
             "type": "object",
             "properties": {
                 "email": {
@@ -327,7 +246,7 @@ const docTemplate = `{
                 }
             }
         },
-        "project-structure-template_internal_constants_model_dto.UpdateUser": {
+        "dto.UpdateUser": {
             "type": "object",
             "properties": {
                 "first_name": {
@@ -344,7 +263,7 @@ const docTemplate = `{
                 }
             }
         },
-        "project-structure-template_internal_constants_model_dto.User": {
+        "dto.User": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -353,11 +272,7 @@ const docTemplate = `{
                 },
                 "deleted_at": {
                     "description": "DeletedAt is the time the user was deleted.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/pgtype.Timestamptz"
-                        }
-                    ]
+                    "type": "string"
                 },
                 "email": {
                     "description": "Email is the email of the user.",
@@ -385,6 +300,47 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "description": "UpdatedAt is the time the user was last updated.",
+                    "type": "string"
+                }
+            }
+        },
+        "model.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Code is the error code. It is not status code",
+                    "type": "integer"
+                },
+                "description": {
+                    "description": "Description is the error description.",
+                    "type": "string"
+                },
+                "field_error": {
+                    "description": "FieldError is the error detail for each field, if available that is.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.FieldError"
+                    }
+                },
+                "message": {
+                    "description": "Message is the error message.",
+                    "type": "string"
+                },
+                "stack_trace": {
+                    "description": "StackTrace is the stack trace of the error.\nIt is only returned for debugging",
+                    "type": "string"
+                }
+            }
+        },
+        "model.FieldError": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Description is the error description for this field.",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name is the name of the field that caused the error.",
                     "type": "string"
                 }
             }

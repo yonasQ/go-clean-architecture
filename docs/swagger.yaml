@@ -1,67 +1,6 @@
 basePath: /v1
 definitions:
-  pgtype.InfinityModifier:
-    enum:
-    - 1
-    - 0
-    - -1
-    type: integer
-    x-enum-varnames:
-    - Infinity
-    - None
-    - NegativeInfinity
-  pgtype.Status:
-    enum:
-    - 0
-    - 1
-    - 2
-    type: integer
-    x-enum-varnames:
-    - Undefined
-    - "Null"
-    - Present
-  pgtype.Timestamptz:
-    properties:
-      infinityModifier:
-        $ref: '#/definitions/pgtype.InfinityModifier'
-      status:
-        $ref: '#/definitions/pgtype.Status'
-      time:
-        type: string
-    type: object
-  project-structure-template_internal_constants_model.ErrorResponse:
-    properties:
-      code:
-        description: Code is the error code. It is not status code
-        type: integer
-      description:
-        description: Description is the error description.
-        type: string
-      field_error:
-        description: FieldError is the error detail for each field, if available that
-          is.
-        items:
-          $ref: '#/definitions/project-structure-template_internal_constants_model.FieldError'
-        type: array
-      message:
-        description: Message is the error message.
-        type: string
-      stack_trace:
-        description: |-
-          StackTrace is the stack trace of the error.
-          It is only returned for debugging
-        type: string
-    type: object
-  project-structure-template_internal_constants_model.FieldError:
-    properties:
-      description:
-        description: Description is the error description for this field.
-        type: string
-      name:
-        description: Name is the name of the field that caused the error.
-        type: string
-    type: object
-  project-structure-template_internal_constants_model_dto.RegisterUser:
+  dto.RegisterUser:
     properties:
       email:
         description: Email is the email of the user.
@@ -76,7 +15,7 @@ definitions:
         description: MiddleName is the middle name of the user.
         type: string
     type: object
-  project-structure-template_internal_constants_model_dto.UpdateUser:
+  dto.UpdateUser:
     properties:
       first_name:
         description: FirstName is the first name of the user.
@@ -88,7 +27,7 @@ definitions:
         description: MiddleName is the middle name of the user.
         type: string
     type: object
-  project-structure-template_internal_constants_model_dto.User:
+  dto.User:
     properties:
       created_at:
         description: |-
@@ -96,9 +35,8 @@ definitions:
           It is automatically set when the user is created.
         type: string
       deleted_at:
-        allOf:
-        - $ref: '#/definitions/pgtype.Timestamptz'
         description: DeletedAt is the time the user was deleted.
+        type: string
       email:
         description: Email is the email of the user.
         type: string
@@ -125,6 +63,38 @@ definitions:
         description: UpdatedAt is the time the user was last updated.
         type: string
     type: object
+  model.ErrorResponse:
+    properties:
+      code:
+        description: Code is the error code. It is not status code
+        type: integer
+      description:
+        description: Description is the error description.
+        type: string
+      field_error:
+        description: FieldError is the error detail for each field, if available that
+          is.
+        items:
+          $ref: '#/definitions/model.FieldError'
+        type: array
+      message:
+        description: Message is the error message.
+        type: string
+      stack_trace:
+        description: |-
+          StackTrace is the stack trace of the error.
+          It is only returned for debugging
+        type: string
+    type: object
+  model.FieldError:
+    properties:
+      description:
+        description: Description is the error description for this field.
+        type: string
+      name:
+        description: Name is the name of the field that caused the error.
+        type: string
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -144,13 +114,13 @@ paths:
           description: Successfully retrieved users
           schema:
             items:
-              $ref: '#/definitions/project-structure-template_internal_constants_model_dto.User'
+              $ref: '#/definitions/dto.User'
             type: array
         "400":
           description: Bad request, check the error response for details
           schema:
             items:
-              $ref: '#/definitions/project-structure-template_internal_constants_model.ErrorResponse'
+              $ref: '#/definitions/model.ErrorResponse'
             type: array
       summary: Get users.
       tags:
@@ -166,19 +136,19 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/project-structure-template_internal_constants_model_dto.RegisterUser'
+          $ref: '#/definitions/dto.RegisterUser'
       produces:
       - application/json
       responses:
         "201":
           description: Successfully created user
           schema:
-            $ref: '#/definitions/project-structure-template_internal_constants_model_dto.User'
+            $ref: '#/definitions/dto.User'
         "400":
           description: Bad request, check the error response for details
           schema:
             items:
-              $ref: '#/definitions/project-structure-template_internal_constants_model.ErrorResponse'
+              $ref: '#/definitions/model.ErrorResponse'
             type: array
       summary: Create a new user.
       tags:
@@ -203,13 +173,13 @@ paths:
           description: Invalid user ID
           schema:
             items:
-              $ref: '#/definitions/project-structure-template_internal_constants_model.ErrorResponse'
+              $ref: '#/definitions/model.ErrorResponse'
             type: array
         "404":
           description: User not found
           schema:
             items:
-              $ref: '#/definitions/project-structure-template_internal_constants_model.ErrorResponse'
+              $ref: '#/definitions/model.ErrorResponse'
             type: array
       summary: Delete user.
       tags:
@@ -229,12 +199,12 @@ paths:
         "200":
           description: Successfully retrieved user
           schema:
-            $ref: '#/definitions/project-structure-template_internal_constants_model_dto.User'
+            $ref: '#/definitions/dto.User'
         "400":
           description: Bad request, check the error response for details
           schema:
             items:
-              $ref: '#/definitions/project-structure-template_internal_constants_model.ErrorResponse'
+              $ref: '#/definitions/model.ErrorResponse'
             type: array
       summary: Get user by ID.
       tags:
@@ -255,19 +225,19 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/project-structure-template_internal_constants_model_dto.UpdateUser'
+          $ref: '#/definitions/dto.UpdateUser'
       produces:
       - application/json
       responses:
         "200":
           description: Successfully updated user
           schema:
-            $ref: '#/definitions/project-structure-template_internal_constants_model_dto.User'
+            $ref: '#/definitions/dto.User'
         "400":
           description: Bad request, check the error response for details
           schema:
             items:
-              $ref: '#/definitions/project-structure-template_internal_constants_model.ErrorResponse'
+              $ref: '#/definitions/model.ErrorResponse'
             type: array
       summary: Update an existing user.
       tags:
