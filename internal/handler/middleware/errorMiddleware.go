@@ -22,23 +22,24 @@ func ErrorHandler(log logger.Logger) gin.HandlerFunc {
 			errStatusCode, r := CastErrorResponse(c, log)
 			constants.ErrorResponse(c, errStatusCode, r)
 			return
-		} else {
-			log.Error(c, "somewhere in the handlers code missing ctx.Error(err)")
-			constants.ErrorResponse(
-				c,
-				http.StatusInternalServerError,
-				&[]model.Response{
-					{
-						OK: false,
-						Error: &model.ErrorResponse{
-							Code:    http.StatusInternalServerError,
-							Message: "Unknown server error",
-						},
-					},
-				},
-			)
-			return
 		}
+		// else {
+		// 	log.Error(c, "somewhere in the handlers code missing ctx.Error(err)")
+		// 	constants.ErrorResponse(
+		// 		c,
+		// 		http.StatusInternalServerError,
+		// 		&[]model.Response{
+		// 			{
+		// 				OK: false,
+		// 				Error: &model.ErrorResponse{
+		// 					Code:    http.StatusInternalServerError,
+		// 					Message: "Unknown server error",
+		// 				},
+		// 			},
+		// 		},
+		// 	)
+		// 	return
+		// }
 	}
 }
 
