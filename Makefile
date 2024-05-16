@@ -11,5 +11,5 @@ migrate-create:
 go-test:
 	go test ./... -p=1 -count=1 
 swagger:
-	-swag fmt && swag init -g initiator/initiator.go
+	- swag fmt && swag init -g initiator/initiator.go --parseDependency --parseInternal
 
