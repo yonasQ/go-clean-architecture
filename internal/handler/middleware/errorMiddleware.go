@@ -19,10 +19,24 @@ func ErrorHandler(log logger.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 		if len(c.Errors) > 0 {
-			e := c.Errors[0] // FIXME: how to handle multiple errors?
-			err := e.Unwrap()
-
-			constants.ErrorResponse(c, CastErrorResponse(err, c, log))
+			errStatusCode, r := CastErrorResponse(c, log)
+			constants.ErrorResponse(c, errStatusCode, r)
+			return
+		} else {
+			log.Error(c, "somewhere in the handlers code missing ctx.Error(err)")
+			constants.ErrorResponse(
+				c,
+				http.StatusInternalServerError,
+				&[]model.Response{
+					{
+						OK: false,
+						Error: &model.ErrorResponse{
+							Code:    http.StatusInternalServerError,
+							Message: "Unknown server error",
+						},
+					},
+				},
+			)
 			return
 		}
 	}
@@ -47,36 +61,86 @@ func ErrorFields(err error) []model.FieldError {
 	return nil
 }
 
-func CastErrorResponse(err error, c *gin.Context, log logger.Logger) *model.ErrorResponse {
+func CastErrorResponse(c *gin.Context, log logger.Logger) (int, *[]model.Response) {
 	debugMode := viper.GetBool("debug")
-	er := errorx.Cast(err)
-	if er == nil {
-		log.Error(c, "unknown errorx type error", zap.Error(err))
-		return &model.ErrorResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Unknown server error",
-		}
-	}
-
+	errStatusCode := http.StatusInternalServerError
+	modelResponse := []model.Response{}
 	response := model.ErrorResponse{}
-	code, ok := errors.ErrorMap[er.Type()]
-	if !ok {
-		response = model.ErrorResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Unknown server error",
+
+	for i, e := range c.Errors {
+		err := e.Unwrap()
+		er := errorx.Cast(err)
+		if er == nil {
+			log.Error(c, "unknown errorx type error", zap.Error(err))
+			response = model.ErrorResponse{
+				Code:    http.StatusInternalServerError,
+				Message: "Unknown server error",
+			}
+			if debugMode {
+				response.StackTrace = fmt.Sprintf("%+v", errorx.EnsureStackTrace(err))
+			}
+			if len(c.Errors) == 1 {
+				errStatusCode = response.Code
+			}
+			modelResponse = append(
+				modelResponse,
+				model.Response{
+					OK:    false,
+					Error: &response,
+				},
+			)
+			if len(c.Errors) == (i + 1) {
+				return errStatusCode, &modelResponse
+			}
+			continue
 		}
-	} else {
-		response = model.ErrorResponse{
-			Code:       code,
-			Message:    er.Message(),
-			FieldError: ErrorFields(er.Cause()),
+
+		code, ok := errors.ErrorMap[er.Type()]
+		if !ok {
+			log.Error(c, "unknown errorx type error", zap.Error(er))
+			response = model.ErrorResponse{
+				Code:    http.StatusInternalServerError,
+				Message: "Unknown server error",
+			}
+			if debugMode {
+				response.Description = fmt.Sprintf("Error: %v", er)
+				response.StackTrace = fmt.Sprintf("%+v", errorx.EnsureStackTrace(err))
+			}
+			if len(c.Errors) == 1 {
+				errStatusCode = response.Code
+			}
+			modelResponse = append(
+				modelResponse,
+				model.Response{
+					OK:    false,
+					Error: &response,
+				},
+			)
+
+		} else {
+			response = model.ErrorResponse{
+				Code:       code,
+				Message:    er.Message(),
+				FieldError: ErrorFields(er.Cause()),
+			}
+			if debugMode {
+				response.Description = fmt.Sprintf("Error: %v", er)
+				response.StackTrace = fmt.Sprintf("%+v", errorx.EnsureStackTrace(err))
+			}
+
+			if len(c.Errors) == 1 {
+				errStatusCode = response.Code
+			}
+
+			modelResponse = append(
+				modelResponse,
+				model.Response{
+					OK:    false,
+					Error: &response,
+				},
+			)
 		}
 	}
 
-	if debugMode {
-		response.Description = fmt.Sprintf("Error: %v", er)
-		response.StackTrace = fmt.Sprintf("%+v", errorx.EnsureStackTrace(err))
-	}
-
-	return &response
+	return errStatusCode, &modelResponse
 }

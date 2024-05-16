@@ -17,9 +17,6 @@ func SuccessResponse(ctx *gin.Context, statusCode int, data interface{}, metaDat
 	)
 }
 
-func ErrorResponse(ctx *gin.Context, err *model.ErrorResponse) {
-	ctx.AbortWithStatusJSON(err.Code, model.Response{
-		OK:    false,
-		Error: err,
-	})
+func ErrorResponse(ctx *gin.Context, errStatusCode int, r *[]model.Response) {
+	ctx.AbortWithStatusJSON(errStatusCode, r)
 }
