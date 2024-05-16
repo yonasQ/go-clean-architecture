@@ -19,27 +19,10 @@ func ErrorHandler(log logger.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 		if len(c.Errors) > 0 {
-			errStatusCode, r := CastErrorResponse(c, log)
-			constants.ErrorResponse(c, errStatusCode, r)
+			errStatusCode, errResponse, multiple := CastErrorResponse(c, log)
+			constants.ErrorResponse(c, errStatusCode, errResponse, multiple)
 			return
 		}
-		// else {
-		// 	log.Error(c, "somewhere in the handlers code missing ctx.Error(err)")
-		// 	constants.ErrorResponse(
-		// 		c,
-		// 		http.StatusInternalServerError,
-		// 		&[]model.Response{
-		// 			{
-		// 				OK: false,
-		// 				Error: &model.ErrorResponse{
-		// 					Code:    http.StatusInternalServerError,
-		// 					Message: "Unknown server error",
-		// 				},
-		// 			},
-		// 		},
-		// 	)
-		// 	return
-		// }
 	}
 }
 
@@ -62,9 +45,10 @@ func ErrorFields(err error) []model.FieldError {
 	return nil
 }
 
-func CastErrorResponse(c *gin.Context, log logger.Logger) (int, *[]model.Response) {
+func CastErrorResponse(c *gin.Context, log logger.Logger) (int, *[]model.Response, bool) {
 	debugMode := viper.GetBool("debug")
 	errStatusCode := http.StatusInternalServerError
+	multiple := true
 	modelResponse := []model.Response{}
 	response := model.ErrorResponse{}
 
@@ -82,6 +66,7 @@ func CastErrorResponse(c *gin.Context, log logger.Logger) (int, *[]model.Respons
 			}
 			if len(c.Errors) == 1 {
 				errStatusCode = response.Code
+				multiple = false
 			}
 			modelResponse = append(
 				modelResponse,
@@ -91,7 +76,7 @@ func CastErrorResponse(c *gin.Context, log logger.Logger) (int, *[]model.Respons
 				},
 			)
 			if len(c.Errors) == (i + 1) {
-				return errStatusCode, &modelResponse
+				return errStatusCode, &modelResponse, multiple
 			}
 			continue
 		}
@@ -109,6 +94,7 @@ func CastErrorResponse(c *gin.Context, log logger.Logger) (int, *[]model.Respons
 			}
 			if len(c.Errors) == 1 {
 				errStatusCode = response.Code
+				multiple = false
 			}
 			modelResponse = append(
 				modelResponse,
@@ -131,6 +117,7 @@ func CastErrorResponse(c *gin.Context, log logger.Logger) (int, *[]model.Respons
 
 			if len(c.Errors) == 1 {
 				errStatusCode = response.Code
+				multiple = false
 			}
 
 			modelResponse = append(
@@ -143,5 +130,5 @@ func CastErrorResponse(c *gin.Context, log logger.Logger) (int, *[]model.Respons
 		}
 	}
 
-	return errStatusCode, &modelResponse
+	return errStatusCode, &modelResponse, multiple
 }
