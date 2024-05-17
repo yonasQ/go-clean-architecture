@@ -38,7 +38,7 @@ func Init(logger logger.Logger, userModule module.User, contextTimeout time.Dura
 //	@Produce		json
 //	@Param			user	body		dto.RegisterUser	true	"User details in JSON format"
 //	@Success		201		{object}	dto.User			"Successfully created user"
-//	@Failure		400		{object}	model.Response		"Bad request, check the error response for details"
+//	@Failure		400		{object}	model.ErrorResponse	"Bad request, check the error response for details"
 //	@Failure		500		{array}		model.Response		"Internal server errors, check the error response for details"
 //	@Router			/users [post]
 func (u *user) CreateUser(ctx *gin.Context) {
@@ -70,11 +70,11 @@ func (u *user) CreateUser(ctx *gin.Context) {
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			id		path		string			true	"User ID"
-//	@Param			user	body		dto.UpdateUser	true	"Updated user details in JSON format"
-//	@Success		200		{object}	dto.User		"Successfully updated user"
-//	@Failure		400		{object}	model.Response	"Bad request, check the error response for details"
-//	@Failure		500		{array}		model.Response	"Internal server errors, check the error response for details"
+//	@Param			id		path		string				true	"User ID"
+//	@Param			user	body		dto.UpdateUser		true	"Updated user details in JSON format"
+//	@Success		200		{object}	dto.User			"Successfully updated user"
+//	@Failure		400		{object}	model.ErrorResponse	"Bad request, check the error response for details"
+//	@Failure		500		{array}		model.Response		"Internal server errors, check the error response for details"
 //	@Router			/users/{id} [patch]
 func (u *user) UpdateUser(ctx *gin.Context) {
 	cntx, cancel := context.WithTimeout(ctx, u.contextTimeout)
@@ -104,10 +104,10 @@ func (u *user) UpdateUser(ctx *gin.Context) {
 //	@Description	This endpoint is used to retrieve information about a user identified by the provided User ID.
 //	@Tags			user
 //	@Produce		json
-//	@Param			id	path		string			true	"User ID"
-//	@Success		200	{object}	dto.User		"Successfully retrieved user"
-//	@Failure		400	{object}	model.Response	"Bad request, check the error response for details"
-//	@Failure		500	{array}		model.Response	"Internal server errors, check the error response for details"
+//	@Param			id	path		string				true	"User ID"
+//	@Success		200	{object}	dto.User			"Successfully retrieved user"
+//	@Failure		400	{object}	model.ErrorResponse	"Bad request, check the error response for details"
+//	@Failure		500	{array}		model.Response		"Internal server errors, check the error response for details"
 //	@Router			/users/{id} [get]
 func (u *user) GetUser(ctx *gin.Context) {
 	cntx, cancel := context.WithTimeout(ctx, u.contextTimeout)
@@ -128,9 +128,9 @@ func (u *user) GetUser(ctx *gin.Context) {
 //	@Description	This endpoint is used to retrieve a list of users.
 //	@Tags			user
 //	@Produce		json
-//	@Success		200	{array}		dto.User		"Successfully retrieved users"
-//	@Failure		400	{object}	model.Response	"Bad request, check the error response for details"
-//	@Failure		500	{array}		model.Response	"Internal server errors, check the error response for details"
+//	@Success		200	{array}		dto.User			"Successfully retrieved users"
+//	@Failure		400	{object}	model.ErrorResponse	"Bad request, check the error response for details"
+//	@Failure		500	{array}		model.Response		"Internal server errors, check the error response for details"
 //	@Router			/users [get]
 func (u *user) GetUsers(ctx *gin.Context) {
 	cntx, cancel := context.WithTimeout(ctx, u.contextTimeout)
@@ -151,11 +151,11 @@ func (u *user) GetUsers(ctx *gin.Context) {
 //	@Description	This function deletes a user if the user is available.
 //	@Tags			delete user
 //	@Produce		json
-//	@Param			id	path		string			true	"User ID"
-//	@Success		200	{object}	model.Response	"Successfully deleted the user"
-//	@Failure		404	{object}	model.Response	"User not found"
-//	@Failure		400	{object}	model.Response	"Invalid user ID"
-//	@Failure		500	{array}		model.Response	"Internal server errors, check the error response for details"
+//	@Param			id	path		string				true	"User ID"
+//	@Success		200	string		string				"Successfully deleted the user"
+//	@Failure		404	{object}	model.ErrorResponse	"User not found"
+//	@Failure		400	{object}	model.ErrorResponse	"Invalid user ID"
+//	@Failure		500	{array}		model.Response		"Internal server errors, check the error response for details"
 //	@Router			/users/{id} [delete]
 func (u *user) DeleteUser(ctx *gin.Context) {
 	cntx, cancel := context.WithTimeout(ctx, u.contextTimeout)
