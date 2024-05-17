@@ -9,6 +9,7 @@ import (
 	"project-structure-template/internal/constants/model/dto"
 	"project-structure-template/internal/storage"
 	"project-structure-template/platform/logger"
+	"time"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -52,6 +53,7 @@ func (u *user) Update(ctx context.Context, id uuid.UUID, param dto.UpdateUser) (
 		FirstName:  param.FirstName,
 		MiddleName: param.MiddleName,
 		LastName:   param.LastName,
+		UpdatedAt:  time.Now(),
 		ID:         id,
 	})
 	if err != nil {

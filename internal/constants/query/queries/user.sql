@@ -20,8 +20,9 @@ UPDATE users
 SET 
   first_name = $1,
   middle_name = $2,
-  last_name = $3
-WHERE id = $4 ANd deleted_at IS NULL
+  last_name = $3,
+  updated_at = $4
+WHERE id = $5 ANd deleted_at IS NULL
 RETURNING *;
 
 -- name: GetUser :one

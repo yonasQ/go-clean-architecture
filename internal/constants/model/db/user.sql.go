@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -133,8 +134,9 @@ UPDATE users
 SET 
   first_name = $1,
   middle_name = $2,
-  last_name = $3
-WHERE id = $4 ANd deleted_at IS NULL
+  last_name = $3,
+  updated_at = $4
+WHERE id = $5 ANd deleted_at IS NULL
 RETURNING id, first_name, middle_name, last_name, email, status, created_at, updated_at, deleted_at
 `
 
@@ -142,6 +144,7 @@ type UpdateUserParams struct {
 	FirstName  string    `json:"first_name"`
 	MiddleName string    `json:"middle_name"`
 	LastName   string    `json:"last_name"`
+	UpdatedAt  time.Time `json:"updated_at"`
 	ID         uuid.UUID `json:"id"`
 }
 
@@ -150,6 +153,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		arg.FirstName,
 		arg.MiddleName,
 		arg.LastName,
+		arg.UpdatedAt,
 		arg.ID,
 	)
 	var i User
