@@ -69,6 +69,7 @@ func (u *user) Update(ctx context.Context, id uuid.UUID, param dto.UpdateUser) (
 		MiddleName: user.MiddleName,
 		LastName:   user.LastName,
 		CreatedAt:  user.CreatedAt,
+		UpdatedAt:  user.UpdatedAt,
 	}, nil
 }
 
