@@ -45,6 +45,7 @@ func (u *user) Create(ctx context.Context, param dto.RegisterUser) (*dto.User, e
 		MiddleName: user.MiddleName,
 		LastName:   user.LastName,
 		CreatedAt:  user.CreatedAt,
+		UpdatedAt:  user.UpdatedAt,
 	}, nil
 }
 
