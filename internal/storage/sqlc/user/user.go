@@ -87,6 +87,7 @@ func (u *user) Get(ctx context.Context, id uuid.UUID) (*dto.User, error) {
 		LastName:   user.LastName,
 		CreatedAt:  user.CreatedAt,
 		Status:     string(user.Status),
+		UpdatedAt:  user.UpdatedAt,
 	}, nil
 }
 
