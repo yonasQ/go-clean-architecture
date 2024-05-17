@@ -42,9 +42,15 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request, check the error response for details",
                         "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server errors, check the error response for details",
+                        "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.ErrorResponse"
+                                "$ref": "#/definitions/model.Response"
                             }
                         }
                     }
@@ -83,9 +89,15 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request, check the error response for details",
                         "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server errors, check the error response for details",
+                        "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.ErrorResponse"
+                                "$ref": "#/definitions/model.Response"
                             }
                         }
                     }
@@ -121,9 +133,15 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request, check the error response for details",
                         "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server errors, check the error response for details",
+                        "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.ErrorResponse"
+                                "$ref": "#/definitions/model.Response"
                             }
                         }
                     }
@@ -135,7 +153,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "delete user"
                 ],
                 "summary": "Delete user.",
                 "parameters": [
@@ -151,24 +169,27 @@ const docTemplate = `{
                     "200": {
                         "description": "Successfully deleted the user",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/model.Response"
                         }
                     },
                     "400": {
                         "description": "Invalid user ID",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.ErrorResponse"
-                            }
+                            "$ref": "#/definitions/model.Response"
                         }
                     },
                     "404": {
                         "description": "User not found",
                         "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server errors, check the error response for details",
+                        "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.ErrorResponse"
+                                "$ref": "#/definitions/model.Response"
                             }
                         }
                     }
@@ -214,9 +235,15 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request, check the error response for details",
                         "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server errors, check the error response for details",
+                        "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.ErrorResponse"
+                                "$ref": "#/definitions/model.Response"
                             }
                         }
                     }
@@ -342,6 +369,58 @@ const docTemplate = `{
                 "name": {
                     "description": "Name is the name of the field that caused the error.",
                     "type": "string"
+                }
+            }
+        },
+        "model.MetaData": {
+            "type": "object",
+            "properties": {
+                "extra": {
+                    "description": "Extra contains other response specific data"
+                },
+                "page": {
+                    "description": "Page  is used to identify the starting point to return rows from a result set",
+                    "type": "integer"
+                },
+                "per_page": {
+                    "description": "PerPage is the number of records to return after filtering",
+                    "type": "integer"
+                },
+                "sort": {
+                    "description": "Sort is used to sort the result set in ascending or descending order",
+                    "type": "string"
+                },
+                "total": {
+                    "description": "Total is the total number of data without pagination",
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Response": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "Data contains the actual data of the response."
+                },
+                "error": {
+                    "description": "Error contains the error detail if the request was not successful.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.ErrorResponse"
+                        }
+                    ]
+                },
+                "meta_data": {
+                    "description": "MetaData contains additional data like filtering, pagination, etc.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.MetaData"
+                        }
+                    ]
+                },
+                "ok": {
+                    "description": "OK is only true if the request was successful.",
+                    "type": "boolean"
                 }
             }
         }

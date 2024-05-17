@@ -95,6 +95,42 @@ definitions:
         description: Name is the name of the field that caused the error.
         type: string
     type: object
+  model.MetaData:
+    properties:
+      extra:
+        description: Extra contains other response specific data
+      page:
+        description: Page  is used to identify the starting point to return rows from
+          a result set
+        type: integer
+      per_page:
+        description: PerPage is the number of records to return after filtering
+        type: integer
+      sort:
+        description: Sort is used to sort the result set in ascending or descending
+          order
+        type: string
+      total:
+        description: Total is the total number of data without pagination
+        type: integer
+    type: object
+  model.Response:
+    properties:
+      data:
+        description: Data contains the actual data of the response.
+      error:
+        allOf:
+        - $ref: '#/definitions/model.ErrorResponse'
+        description: Error contains the error detail if the request was not successful.
+      meta_data:
+        allOf:
+        - $ref: '#/definitions/model.MetaData'
+        description: MetaData contains additional data like filtering, pagination,
+          etc.
+      ok:
+        description: OK is only true if the request was successful.
+        type: boolean
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -119,8 +155,12 @@ paths:
         "400":
           description: Bad request, check the error response for details
           schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal server errors, check the error response for details
+          schema:
             items:
-              $ref: '#/definitions/model.ErrorResponse'
+              $ref: '#/definitions/model.Response'
             type: array
       summary: Get users.
       tags:
@@ -147,8 +187,12 @@ paths:
         "400":
           description: Bad request, check the error response for details
           schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal server errors, check the error response for details
+          schema:
             items:
-              $ref: '#/definitions/model.ErrorResponse'
+              $ref: '#/definitions/model.Response'
             type: array
       summary: Create a new user.
       tags:
@@ -168,22 +212,24 @@ paths:
         "200":
           description: Successfully deleted the user
           schema:
-            type: string
+            $ref: '#/definitions/model.Response'
         "400":
           description: Invalid user ID
           schema:
-            items:
-              $ref: '#/definitions/model.ErrorResponse'
-            type: array
+            $ref: '#/definitions/model.Response'
         "404":
           description: User not found
           schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal server errors, check the error response for details
+          schema:
             items:
-              $ref: '#/definitions/model.ErrorResponse'
+              $ref: '#/definitions/model.Response'
             type: array
       summary: Delete user.
       tags:
-      - user
+      - delete user
     get:
       description: This endpoint is used to retrieve information about a user identified
         by the provided User ID.
@@ -203,8 +249,12 @@ paths:
         "400":
           description: Bad request, check the error response for details
           schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal server errors, check the error response for details
+          schema:
             items:
-              $ref: '#/definitions/model.ErrorResponse'
+              $ref: '#/definitions/model.Response'
             type: array
       summary: Get user by ID.
       tags:
@@ -236,8 +286,12 @@ paths:
         "400":
           description: Bad request, check the error response for details
           schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: Internal server errors, check the error response for details
+          schema:
             items:
-              $ref: '#/definitions/model.ErrorResponse'
+              $ref: '#/definitions/model.Response'
             type: array
       summary: Update an existing user.
       tags:
