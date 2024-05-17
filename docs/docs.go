@@ -42,7 +42,7 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request, check the error response for details",
                         "schema": {
-                            "$ref": "#/definitions/model.Response"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     },
                     "500": {
@@ -89,7 +89,7 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request, check the error response for details",
                         "schema": {
-                            "$ref": "#/definitions/model.Response"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     },
                     "500": {
@@ -133,7 +133,7 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request, check the error response for details",
                         "schema": {
-                            "$ref": "#/definitions/model.Response"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     },
                     "500": {
@@ -169,19 +169,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Successfully deleted the user",
                         "schema": {
-                            "$ref": "#/definitions/model.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Invalid user ID",
                         "schema": {
-                            "$ref": "#/definitions/model.Response"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "User not found",
                         "schema": {
-                            "$ref": "#/definitions/model.Response"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     },
                     "500": {
@@ -235,7 +235,7 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request, check the error response for details",
                         "schema": {
-                            "$ref": "#/definitions/model.Response"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     },
                     "500": {
